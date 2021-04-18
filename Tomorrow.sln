@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tomorrow.Web.Server", "Tomorrow.Web\Server\Tomorrow.Web.Server.csproj", "{3C5B4D70-745C-4FDF-9A62-3252BA4EBEFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomorrow.Web.Server", "Tomorrow.Web\Server\Tomorrow.Web.Server.csproj", "{3C5B4D70-745C-4FDF-9A62-3252BA4EBEFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tomorrow.Web.Client", "Tomorrow.Web\Client\Tomorrow.Web.Client.csproj", "{9D6600A0-BBC9-4FFD-8947-6DAA74650489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomorrow.Web.Client", "Tomorrow.Web\Client\Tomorrow.Web.Client.csproj", "{9D6600A0-BBC9-4FFD-8947-6DAA74650489}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tomorrow.Web.Shared", "Tomorrow.Web\Shared\Tomorrow.Web.Shared.csproj", "{2C8134E3-CBCF-49F2-81BC-1F5F9626AB4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tomorrow.Application", "Tomorrow.Application\Tomorrow.Application.csproj", "{5679AFDA-44D1-4A8D-91E2-D93AAEA91E3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tomorrow.DomainModel", "Tomorrow.DomainModel\Tomorrow.DomainModel.csproj", "{27AF92A8-A9A6-4DEB-9A2D-721A327340D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tomorrow.Persistence", "Tomorrow.Persistence\Tomorrow.Persistence.csproj", "{B2788804-CE41-4510-83A6-D5E0A8A758F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +27,18 @@ Global
 		{9D6600A0-BBC9-4FFD-8947-6DAA74650489}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D6600A0-BBC9-4FFD-8947-6DAA74650489}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D6600A0-BBC9-4FFD-8947-6DAA74650489}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C8134E3-CBCF-49F2-81BC-1F5F9626AB4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C8134E3-CBCF-49F2-81BC-1F5F9626AB4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C8134E3-CBCF-49F2-81BC-1F5F9626AB4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C8134E3-CBCF-49F2-81BC-1F5F9626AB4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5679AFDA-44D1-4A8D-91E2-D93AAEA91E3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5679AFDA-44D1-4A8D-91E2-D93AAEA91E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5679AFDA-44D1-4A8D-91E2-D93AAEA91E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5679AFDA-44D1-4A8D-91E2-D93AAEA91E3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27AF92A8-A9A6-4DEB-9A2D-721A327340D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27AF92A8-A9A6-4DEB-9A2D-721A327340D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27AF92A8-A9A6-4DEB-9A2D-721A327340D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27AF92A8-A9A6-4DEB-9A2D-721A327340D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2788804-CE41-4510-83A6-D5E0A8A758F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2788804-CE41-4510-83A6-D5E0A8A758F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2788804-CE41-4510-83A6-D5E0A8A758F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2788804-CE41-4510-83A6-D5E0A8A758F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

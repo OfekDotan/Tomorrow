@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\Tomorrow.Web.Client.csproj" />
-    <ProjectReference Include="..\Shared\Tomorrow.Web.Shared.csproj" />
   </ItemGroup>
 
 
