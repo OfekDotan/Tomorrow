@@ -1,0 +1,19 @@
+﻿@page "/create-todo"
+@inject HttpClient HttpClient
+<h3>Component</h3>
+
+<div class="mb-3">
+    <label for="name" class="form-label">Email address</label>
+    <input type="text" class="form-control" id="name" placeholder="Buy tomatoes" @bind-value="Name">
+    <button @onclick="Create">create</button>
+</div>
+
+@code {
+    public string Name { get; set; }
+    public async Task Create()
+    {
+        var todo = new { Name };
+        var response = await HttpClient.PostAsJsonAsync("api/todos", todo);
+        response.EnsureSuccessStatusCode();
+    }
+}
