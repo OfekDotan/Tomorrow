@@ -28,7 +28,7 @@ namespace Tomorrow.Application.Todos.Commands.Create
 			if (request.Name.Length > 256)
 				throw new InvalidOperationException("Todo name is too long");
 
-			var todo = new Todo(todoId, currentAccount, request.Name, new Priority());
+			var todo = new Todo(todoId, currentAccount, request.Name, new Priority(request.Priority));
 			dbContext.Todos.Add(todo);
 			await dbContext.SaveChangesAsync(cancellationToken);
 

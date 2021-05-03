@@ -14,6 +14,10 @@ namespace Tomorrow.DomainModel.Todos
 			AccountId = account.Id;
 		}
 
+		private Todo(Identifier<Todo> id) : base(id)
+		{
+		}
+
 		public Identifier<Account> AccountId { get; }
 
 		[MemberNotNullWhen(true, nameof(GroupId))]
