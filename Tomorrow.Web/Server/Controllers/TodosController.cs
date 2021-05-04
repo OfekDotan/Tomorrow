@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tomorrow.Application.Todos.Commands.Create;
+using Tomorrow.Application.Todos.Queries.GetById;
+using Tomorrow.DomainModel.Todos;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,6 +30,8 @@ namespace Tomorrow.Web.Server.Controllers
 			var todo = new
 			{
 				Id = todoId,
+				command.Name,
+				command.Priority
 			};
 			return CreatedAtAction("GetById", "Todos", new { Id = todoId }, todo);
 		}
@@ -47,9 +51,12 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// GET api/<TodosController>/5
 		[HttpGet("{id}")]
-		public string GetById(Guid id)
+		public async Task<ActionResult<Todo>> GetById(Guid id)
 		{
-			return id.ToString();
+			var query = new GetTodoByIdQuery(id);
+			var todo = await requestSender.Send(query);
+
+			return Ok(todo);
 		}
 
 		// PUT api/<TodosController>/5

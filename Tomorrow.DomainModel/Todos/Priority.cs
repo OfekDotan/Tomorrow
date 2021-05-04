@@ -11,6 +11,11 @@ namespace Tomorrow.DomainModel.Todos
 			this.priority = priority;
 		}
 
+		public int ToInt32()
+		{
+			return priority;
+		}
+
 		public int CompareTo(Priority? other)
 		{
 			if (other is null)
