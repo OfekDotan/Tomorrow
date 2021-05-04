@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -46,9 +47,9 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// GET api/<TodosController>/5
 		[HttpGet("{id}")]
-		public string Get(int id)
+		public string GetById(Guid id)
 		{
-			return "value";
+			return id.ToString();
 		}
 
 		// PUT api/<TodosController>/5

@@ -11,20 +11,19 @@ namespace Tomorrow.DomainModel.Todos
 		{
 			Name = name;
 			Priority = priority;
-			AccountId = account.Id;
+			OwnerId = account.Id;
 		}
 
 		private Todo(Identifier<Todo> id) : base(id)
 		{
 		}
 
-		public Identifier<Account> AccountId { get; }
-
 		[MemberNotNullWhen(true, nameof(GroupId))]
 		public bool BelongsToGroup => GroupId is not null;
 
 		public Identifier<Group>? GroupId { get; private set; }
 		public string Name { get; private set; }
+		public Identifier<Account> OwnerId { get; }
 		public Priority Priority { get; private set; }
 
 		[MemberNotNull(nameof(GroupId))]

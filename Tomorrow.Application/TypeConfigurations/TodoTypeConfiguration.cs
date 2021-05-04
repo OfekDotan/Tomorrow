@@ -22,11 +22,11 @@ namespace Tomorrow.Application.TypeConfigurations
 			builder
 				.HasOne<Group>()
 				.WithMany()
-				.HasForeignKey(t => t.GroupId);
+				.HasForeignKey(t => t.GroupId).OnDelete(DeleteBehavior.ClientCascade);
 			builder
 				.HasOne<Account>()
 				.WithMany()
-				.HasForeignKey(t => t.AccountId);
+				.HasForeignKey(t => t.OwnerId);
 			builder
 				.Property(t => t.Name)
 				.HasMaxLength(256);

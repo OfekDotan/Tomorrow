@@ -1,19 +1,38 @@
 ﻿@page "/create-todo"
 @inject HttpClient HttpClient
-<h3>Component</h3>
+<h3>Create a todo</h3>
 
 <div class="mb-3">
-    <label for="name" class="form-label">Email address</label>
-    <input type="text" class="form-control" id="name" placeholder="Buy tomatoes" @bind-value="Name">
-    <button @onclick="Create">create</button>
+    <EditForm Model="@todo" OnValidSubmit="@CreateAsync">
+        @if (created)
+        {
+            <div class="alert alert-success" role="alert">
+                Todo created successfully!
+            </div>
+        }
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <InputText class="form-control" id="name" @bind-Value="@todo.Name" />
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Priority</label>
+            <InputNumber class="form-control" id="priority" @bind-Value="@todo.Priority" />
+        </div>
+        <button class="btn btn-primary mb-3" type="submit">Submit</button>
+    </EditForm>
 </div>
 
 @code {
-    public string Name { get; set; }
-    public async Task Create()
+    private Todo todo = new Todo();
+    private bool created = false;
+    public async Task CreateAsync()
     {
-        var todo = new { Name };
         var response = await HttpClient.PostAsJsonAsync("api/todos", todo);
         response.EnsureSuccessStatusCode();
+        created = true;
+        todo = new Todo();
+        StateHasChanged();
     }
 }
