@@ -2,5 +2,5 @@
 
 namespace Tomorrow.Application.Todos
 {
-	public record TodoDTO(Guid Id, string Name, int Priority);
+	public record TodoDto(Guid Id, string Name, int Priority);
 }

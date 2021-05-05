@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Tomorrow.Application.Todos;
 using Tomorrow.Application.Todos.Commands.Create;
 using Tomorrow.Application.Todos.Queries.GetById;
-using Tomorrow.DomainModel.Todos;
+using Tomorrow.Application.Todos.Queries.List;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -44,14 +45,18 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// GET: api/<TodosController>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		public async Task<ActionResult<IEnumerable<TodoDto>>> GetAsListAsync(int limit, int offset)
 		{
-			return new string[] { "value1", "value2" };
+			var query = new ListTodosQuery(limit, offset);
+
+			var todos = await requestSender.Send(query);
+
+			return Ok(todos);
 		}
 
 		// GET api/<TodosController>/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Todo>> GetById(Guid id)
+		public async Task<ActionResult<TodoDto>> GetById(Guid id)
 		{
 			var query = new GetTodoByIdQuery(id);
 			var todo = await requestSender.Send(query);

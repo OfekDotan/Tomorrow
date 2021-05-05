@@ -7,7 +7,7 @@ using Tomorrow.DomainModel.Todos;
 
 namespace Tomorrow.Application.Todos.Queries.GetById
 {
-	internal class Handler : IRequestHandler<GetTodoByIdQuery, TodoDTO>
+	internal class Handler : IRequestHandler<GetTodoByIdQuery, TodoDto>
 	{
 		private readonly IAccountProvider accountProvider;
 		private readonly CustomDbContext customDbContext;
@@ -18,7 +18,7 @@ namespace Tomorrow.Application.Todos.Queries.GetById
 			this.accountProvider = accountProvider;
 		}
 
-		public async Task<TodoDTO> Handle(GetTodoByIdQuery request, CancellationToken cancellationToken)
+		public async Task<TodoDto> Handle(GetTodoByIdQuery request, CancellationToken cancellationToken)
 		{
 			var id = new Identifier<Todo>(request.TodoId);
 			var todo = await customDbContext.Todos.FindAsync(new object[] { id }, cancellationToken);
@@ -30,7 +30,7 @@ namespace Tomorrow.Application.Todos.Queries.GetById
 			if (!currentAccount.Id.Equals(todoOwnerId))
 				throw new Exception("Todo not found");
 
-			return new TodoDTO(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32());
+			return new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32());
 		}
 	}
 }

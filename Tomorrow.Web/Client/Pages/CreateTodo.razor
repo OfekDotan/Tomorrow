@@ -22,17 +22,83 @@
         </div>
         <button class="btn btn-primary mb-3" type="submit">Submit</button>
     </EditForm>
+    @if (!todos.Any())
+    {
+        <h3>
+            Loading todos...
+        </h3>
+    }
+    else
+    {
+        @foreach (var currentTodo in todos)
+        {
+            <div class="card">
+
+                <div class="card-body">
+                    <h4 class="card-title">@currentTodo.Name</h4>
+                    @{
+                        string urgency = "very urgent";
+                        string color = "#720808";
+                        if (currentTodo.Priority < 8)
+                        {
+                            urgency = "urgent";
+                            color = "#E21612";
+                        }
+                        if (currentTodo.Priority < 5)
+                        {
+                            urgency = "this week";
+                            color = "#F6AA1C";
+                        }
+                        if (currentTodo.Priority < 2)
+                        {
+                            urgency = "sometime";
+                            color = "#3E8E5A";
+                        }
+                    }
+                    <h5 class="card-subtitle" style="color:@color">@urgency</h5>
+                </div>
+            </div>
+        }
+    }
 </div>
 
 @code {
+    private int loadLimit = 10, loadOffset = 0;
+
+    private List<Todo> todos = new List<Todo>();
+
     private Todo todo = new Todo();
     private bool created = false;
+    protected override async Task OnInitializedAsync()
+    {
+        while (await LoadMoreTodosAsync()) ;
+    }
+
     public async Task CreateAsync()
     {
         var response = await HttpClient.PostAsJsonAsync("api/todos", todo);
         response.EnsureSuccessStatusCode();
         created = true;
+        todos.Add(todo);
+        todos.Sort((x, y) => y.Priority.CompareTo(x.Priority));
         todo = new Todo();
         StateHasChanged();
+    }
+
+    private async Task<bool> LoadMoreTodosAsync()
+    {
+        var newTodos = await LoadMoreTodosAsync(loadLimit, loadOffset);
+        todos.AddRange(newTodos);
+
+        StateHasChanged();
+        loadOffset += loadLimit;
+        return newTodos.Count == loadLimit;
+    }
+
+    private async Task<List<Todo>> LoadMoreTodosAsync(int limit, int offset)
+    {
+        var url = $"api/Todos?limit={limit}&offset={offset}";
+        var loadedTodos = await HttpClient.GetFromJsonAsync<List<Todo>>(url);
+        return loadedTodos;
     }
 }
