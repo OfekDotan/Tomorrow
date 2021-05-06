@@ -23,7 +23,7 @@ namespace Tomorrow.Application.Todos.Queries.GetById
 			var id = new Identifier<Todo>(request.TodoId);
 			var todo = await customDbContext.Todos.FindAsync(new object[] { id }, cancellationToken);
 
-			if (todo is null)
+			if (todo is null || todo.Archived)
 				throw new Exception("Todo not found");
 			var currentAccount = await accountProvider.GetCurrentAsync(cancellationToken);
 			var todoOwnerId = todo.OwnerId;

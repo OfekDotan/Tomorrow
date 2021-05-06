@@ -1,4 +1,5 @@
-﻿using Tomorrow.DomainModel.Accounts;
+﻿using System;
+using Tomorrow.DomainModel.Accounts;
 
 namespace Tomorrow.DomainModel.Groups
 {
@@ -8,13 +9,24 @@ namespace Tomorrow.DomainModel.Groups
 		{
 			Name = name;
 			OwnerId = owner.Id;
+			Archived = false;
 		}
 
 		private Group(Identifier<Group> id) : base(id)
 		{
 		}
 
+		public bool Archived { get; private set; }
+
 		public string Name { get; }
+
 		public Identifier<Account> OwnerId { get; }
+
+		public void Archive()
+		{
+			if (Archived)
+				throw new Exception("Group already archived");
+			Archived = true;
+		}
 	}
 }

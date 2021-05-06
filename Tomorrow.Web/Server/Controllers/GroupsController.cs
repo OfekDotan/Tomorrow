@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tomorrow.Application.Groups.Commands.Create;
+using Tomorrow.Application.Groups.Commands.Delete;
+using Tomorrow.Application.Groups.Queries;
+using Tomorrow.Application.Groups.Queries.GetById;
+using Tomorrow.Application.Groups.Queries.List;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,6 +24,17 @@ namespace Tomorrow.Web.Server.Controllers
 			this.requestSender = requestSender;
 		}
 
+		// DELETE api/<GroupsController>/5
+		[HttpDelete("{id}")]
+		public async Task<ActionResult> Archive(Guid id)
+		{
+			var command = new ArchiveGroupCommand(id);
+
+			await requestSender.Send(command);
+
+			return NoContent();
+		}
+
 		// POST api/<GroupsController>
 		[HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateGroupCommand createGroupCommand)
@@ -28,24 +44,26 @@ namespace Tomorrow.Web.Server.Controllers
 			return CreatedAtAction("GetById", "Groups", new { Id = groupId }, group);
 		}
 
-		// DELETE api/<GroupsController>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
+		// GET api/<GroupsController>/5
+		[HttpGet("{id}")]
+		public async Task<ActionResult<GroupDto>> GetById(Guid id)
 		{
+			var query = new GetGroupByIdQuery(id);
+
+			var group = await requestSender.Send(query);
+
+			return Ok(group);
 		}
 
 		// GET: api/<GroupsController>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		public async Task<ActionResult<IEnumerable<GroupDto>>> ListGroups(int limit, int offset)
 		{
-			return new string[] { "value1", "value2" };
-		}
+			var query = new ListGroupsQuery(limit, offset);
 
-		// GET api/<GroupsController>/5
-		[HttpGet("{id}")]
-		public string GetById(int id)
-		{
-			return "value";
+			var groups = await requestSender.Send(query);
+
+			return Ok(groups);
 		}
 
 		// PUT api/<GroupsController>/5

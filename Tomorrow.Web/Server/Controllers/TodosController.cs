@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tomorrow.Application.Todos;
+using Tomorrow.Application.Todos.Commands.Archive;
 using Tomorrow.Application.Todos.Commands.Create;
+using Tomorrow.Application.Todos.Commands.Edit;
 using Tomorrow.Application.Todos.Queries.GetById;
 using Tomorrow.Application.Todos.Queries.List;
 
@@ -23,6 +25,17 @@ namespace Tomorrow.Web.Server.Controllers
 			this.requestSender = requestSender;
 		}
 
+		// DELETE api/<TodosController>/5
+		[HttpDelete("{id}")]
+		public async Task<ActionResult> Archive(Guid id)
+		{
+			var command = new ArchiveTodoCommand(id);
+
+			await requestSender.Send(command);
+
+			return NoContent();
+		}
+
 		// POST api/<TodosController>
 		[HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateTodoCommand command)
@@ -35,12 +48,6 @@ namespace Tomorrow.Web.Server.Controllers
 				command.Priority
 			};
 			return CreatedAtAction("GetById", "Todos", new { Id = todoId }, todo);
-		}
-
-		// DELETE api/<TodosController>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
 		}
 
 		// GET: api/<TodosController>
@@ -56,9 +63,10 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// GET api/<TodosController>/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<TodoDto>> GetById(Guid id)
+		public async Task<ActionResult<TodoDto>> GetByIdAsync(Guid id)
 		{
 			var query = new GetTodoByIdQuery(id);
+
 			var todo = await requestSender.Send(query);
 
 			return Ok(todo);
@@ -66,8 +74,16 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// PUT api/<TodosController>/5
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		public async Task<IActionResult> PutAsync(Guid id, [FromBody] EditTodoCommand command)
 		{
+			if (id != command.Id)
+			{
+				throw new Exception("Url id param and request doesn't match");
+			}
+
+			await requestSender.Send(command);
+
+			return NoContent();
 		}
 	}
 }

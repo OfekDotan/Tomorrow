@@ -4,10 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Tomorrow.DomainModel;
+using Tomorrow.DomainModel.Groups;
 
-namespace Tomorrow.Application.Todos.Queries.List
+namespace Tomorrow.Application.Todos.Queries.ListByGroup
 {
-	internal class Handler : IRequestHandler<ListTodosQuery, IReadOnlyList<TodoDto>>
+	internal class Handler : IRequestHandler<ListTodosByGroupQuery, IReadOnlyList<TodoDto>>
 	{
 		private readonly IAccountProvider accountProvider;
 		private readonly CustomDbContext customDbContext;
@@ -18,13 +20,14 @@ namespace Tomorrow.Application.Todos.Queries.List
 			this.customDbContext = customDbContext;
 		}
 
-		public async Task<IReadOnlyList<TodoDto>> Handle(ListTodosQuery request, CancellationToken cancellationToken)
+		public async Task<IReadOnlyList<TodoDto>> Handle(ListTodosByGroupQuery request, CancellationToken cancellationToken)
 		{
 			var currentAccount = await accountProvider.GetCurrentAsync(cancellationToken);
-
+			var groupId = new Identifier<Group>(request.groupId);
 			var todos = await customDbContext.Todos
 					.AsNoTracking()
 					.Where(todo => todo.OwnerId == currentAccount.Id)
+					.Where(todo => todo.GroupId == groupId)
 					.Where(todo => !todo.Archived)
 					.OrderByDescending(t => EF.Property<int>(t.Priority, "priority"))
 					.Skip(request.Offset)
