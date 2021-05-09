@@ -14,6 +14,7 @@ namespace Tomorrow.DomainModel.Todos
 			Priority = priority;
 			OwnerId = account.Id;
 			Archived = false;
+			Completed = false;
 		}
 
 		private Todo(Identifier<Todo> id) : base(id)
@@ -24,6 +25,8 @@ namespace Tomorrow.DomainModel.Todos
 
 		[MemberNotNullWhen(true, nameof(GroupId))]
 		public bool BelongsToGroup => GroupId is not null;
+
+		public bool Completed { get; set; }
 
 		public Identifier<Group>? GroupId { get; private set; }
 
@@ -49,6 +52,13 @@ namespace Tomorrow.DomainModel.Todos
 		public void ChangePriority(Priority priority)
 		{
 			Priority = priority;
+		}
+
+		public void Complete()
+		{
+			if (Completed)
+				throw new Exception("Todo already completed");
+			Completed = true;
 		}
 
 		public void RemoveFromGroup()

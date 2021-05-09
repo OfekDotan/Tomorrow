@@ -1,3 +1,4 @@
+using MatBlazor;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -83,6 +84,8 @@ namespace Tomorrow.Web.Server
 
 			services.AddControllersWithViews();
 			services.AddRazorPages();
+
+			services.AddMatBlazor();
 		}
 	}
 }

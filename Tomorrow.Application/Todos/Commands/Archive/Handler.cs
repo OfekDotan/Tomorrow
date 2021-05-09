@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Tomorrow.DomainModel;
+using Tomorrow.DomainModel.Todos;
 
 namespace Tomorrow.Application.Todos.Commands.Archive
 {
@@ -19,7 +21,8 @@ namespace Tomorrow.Application.Todos.Commands.Archive
 		public async Task<Unit> Handle(ArchiveTodoCommand request, CancellationToken cancellationToken)
 		{
 			var account = await accountProvider.GetCurrentAsync(cancellationToken);
-			var todo = await dbContext.Todos.FindAsync(new object[] { request.TodoId }, cancellationToken);
+			var todoId = new Identifier<Todo>(request.TodoId);
+			var todo = await dbContext.Todos.FindAsync(new object[] { todoId }, cancellationToken);
 
 			if (todo is null)
 				throw new Exception("Todo not found");

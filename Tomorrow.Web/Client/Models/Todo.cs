@@ -8,6 +8,7 @@ namespace Tomorrow.Web.Client.Models
 		public string Id { get; set; }
 
 		[StringLength(256, ErrorMessage = "Name is too long")]
+		[Required]
 		public string Name { get; set; }
 
 		[Range(0, 10)]

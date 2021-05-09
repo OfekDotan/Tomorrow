@@ -1,7 +1,4 @@
-﻿@page "/get-todo"
-@inject HttpClient HttpClient
-<h3>Get a todo</h3>
-
+﻿@inject HttpClient HttpClient
 <div class="mb-3">
     <EditForm Model="@todo" OnValidSubmit="@GetAsync">
         @if (created)

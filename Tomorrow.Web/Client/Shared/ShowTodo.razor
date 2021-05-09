@@ -1,0 +1,82 @@
+﻿@inject HttpClient HttpClient
+
+@if (viewMode)
+{
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h6" Class="card-title">
+                @Todo.Name
+            </MudText>
+            @{
+                (var urgency, var cssClass) = getUrgency(Todo.Priority);
+            }
+            <MudText Typo="Typo.subtitle2" Class="@cssClass">@urgency</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary" @onclick="ShowEditor">Edit</MudButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Done" Color="Color.Default" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="DeleteAsync" />
+        </MudCardActions>
+    </MudCard>
+}
+else
+{
+    <EditTodo Todo="@Todo" EventCallback="CloseEditorAsync"></EditTodo>
+}
+
+@code {
+    [Parameter]
+    public Todo Todo { get; set; }
+    private bool viewMode = true;
+
+    public async Task DeleteAsync()
+    {
+        string url = "api/todos/" + Todo.Id;
+        var response = await HttpClient.DeleteAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        Todo = null;
+
+        StateHasChanged();
+    }
+
+    public void ShowEditor()
+    {
+        viewMode = false;
+        StateHasChanged();
+
+    }
+    public async Task CloseEditorAsync()
+    {
+        viewMode = true;
+        StateHasChanged();
+    }
+    public (string urgencyName, string cssClass) getUrgency(int priority)
+    {
+        string urgency = "very urgent";
+        string cssClass = "very-urgent";
+        if (Todo.Priority < 8)
+        {
+            urgency = "urgent";
+            cssClass = "urgent";
+        }
+        if (Todo.Priority < 5)
+        {
+            urgency = "soon";
+            cssClass = "not-urgent";
+        }
+        if (Todo.Priority < 2)
+        {
+            urgency = "sometime";
+            cssClass = "sometime";
+        }
+        if (Todo.Priority == 0)
+        {
+            urgency = "unspecified";
+            cssClass = "unspecified";
+
+        }
+        return (urgency, cssClass);
+    }
+
+}

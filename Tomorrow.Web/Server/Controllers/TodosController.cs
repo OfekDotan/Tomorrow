@@ -5,10 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tomorrow.Application.Todos;
 using Tomorrow.Application.Todos.Commands.Archive;
+using Tomorrow.Application.Todos.Commands.Complete;
 using Tomorrow.Application.Todos.Commands.Create;
 using Tomorrow.Application.Todos.Commands.Edit;
 using Tomorrow.Application.Todos.Queries.GetById;
-using Tomorrow.Application.Todos.Queries.List;
+using Tomorrow.Application.Todos.Queries.ListAll;
+using Tomorrow.Application.Todos.Queries.ListWithoutGroup;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,6 +38,20 @@ namespace Tomorrow.Web.Server.Controllers
 			return NoContent();
 		}
 
+		// PUT api/<TodosController>/5
+		[HttpPut("{id}/complete")]
+		public async Task<IActionResult> CompleteAsync(Guid id, [FromBody] CompleteTodoCommand command)
+		{
+			if (id != command.Id)
+			{
+				throw new Exception("Url id param and request doesn't match");
+			}
+
+			await requestSender.Send(command);
+
+			return NoContent();
+		}
+
 		// POST api/<TodosController>
 		[HttpPost]
 		public async Task<IActionResult> CreateAsync([FromBody] CreateTodoCommand command)
@@ -52,9 +68,13 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// GET: api/<TodosController>
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<TodoDto>>> GetAsListAsync(int limit, int offset)
+		public async Task<ActionResult<IEnumerable<TodoDto>>> GetAsListAsync(int limit, int offset, bool listAll)
 		{
-			var query = new ListTodosQuery(limit, offset);
+			IRequest<IReadOnlyList<TodoDto>> query;
+			if (listAll)
+				query = new ListAllTodosQuery(limit, offset);
+			else
+				query = new ListTodosWithoutGroupQuery(limit, offset);
 
 			var todos = await requestSender.Send(query);
 

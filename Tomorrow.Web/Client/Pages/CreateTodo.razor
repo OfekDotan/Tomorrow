@@ -1,5 +1,6 @@
 ﻿@page "/create-todo"
 @inject HttpClient HttpClient
+
 <h3>Create a todo</h3>
 
 <div class="mb-3">
@@ -22,44 +23,62 @@
         </div>
         <button class="btn btn-primary mb-3" type="submit">Submit</button>
     </EditForm>
-    @if (!todos.Any())
-    {
-        <h3>
-            Loading todos...
-        </h3>
-    }
-    else
-    {
-        @foreach (var currentTodo in todos)
+    <div class="todos">
+        @if (!todos.Any())
         {
-            <div class="card">
-
-                <div class="card-body">
-                    <h4 class="card-title">@currentTodo.Name</h4>
-                    @{
-                        string urgency = "very urgent";
-                        string color = "#720808";
-                        if (currentTodo.Priority < 8)
-                        {
-                            urgency = "urgent";
-                            color = "#E21612";
-                        }
-                        if (currentTodo.Priority < 5)
-                        {
-                            urgency = "this week";
-                            color = "#F6AA1C";
-                        }
-                        if (currentTodo.Priority < 2)
-                        {
-                            urgency = "sometime";
-                            color = "#3E8E5A";
-                        }
-                    }
-                    <h5 class="card-subtitle" style="color:@color">@urgency</h5>
-                </div>
-            </div>
+            <h3>
+                Loading todos...
+            </h3>
         }
-    }
+        else
+        {
+            var veryUrgent = todos
+                .Where(t => t.Priority >= 8);
+            var urgent = todos
+                .Where(t => t.Priority < 8)
+                .Where(t => t.Priority >= 5);
+            var soon = todos
+                .Where(t => t.Priority < 5)
+                .Where(t => t.Priority >= 2);
+            var sometime = todos
+                .Where(t => t.Priority < 2)
+                .Where(t => t.Priority != 0);
+            var unspecified = todos
+                .Where(t => t.Priority == 0);
+
+            @foreach (var currentTodo in todos.Where(t => t is not null))
+            {<div class="todo">
+                    <ShowTodo Todo="@currentTodo" />
+                </div>
+            }
+            @*
+                @foreach (var currentTodo in urgent)
+                {
+                    <div class="todo">
+                        <ShowTodo Todo="@currentTodo" />
+                    </div>
+                }
+                @foreach (var currentTodo in soon)
+                {
+                    <div class="todo">
+                        <ShowTodo Todo="@currentTodo" />
+                    </div>
+                }
+                @foreach (var currentTodo in sometime)
+                {
+                    <div class="todo">
+                        <ShowTodo Todo="@currentTodo" />
+                    </div>
+                }
+                @foreach (var currentTodo in unspecified)
+                {
+                    <div class="todo">
+                        <ShowTodo Todo="@currentTodo" />
+                    </div>
+                }*@
+
+        }
+    </div>
 </div>
 
 @code {
@@ -97,7 +116,7 @@
 
     private async Task<List<Todo>> LoadMoreTodosAsync(int limit, int offset)
     {
-        var url = $"api/Todos?limit={limit}&offset={offset}";
+        var url = $"api/Todos?limit={limit}&offset={offset}&listAll=true";
         var loadedTodos = await HttpClient.GetFromJsonAsync<List<Todo>>(url);
         return loadedTodos;
     }

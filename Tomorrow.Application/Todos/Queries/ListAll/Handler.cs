@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tomorrow.Application.Todos.Queries.List
+namespace Tomorrow.Application.Todos.Queries.ListAll
 {
-	internal class Handler : IRequestHandler<ListTodosQuery, IReadOnlyList<TodoDto>>
+	internal class Handler : IRequestHandler<ListAllTodosQuery, IReadOnlyList<TodoDto>>
 	{
 		private readonly IAccountProvider accountProvider;
 		private readonly CustomDbContext customDbContext;
@@ -18,7 +18,7 @@ namespace Tomorrow.Application.Todos.Queries.List
 			this.customDbContext = customDbContext;
 		}
 
-		public async Task<IReadOnlyList<TodoDto>> Handle(ListTodosQuery request, CancellationToken cancellationToken)
+		public async Task<IReadOnlyList<TodoDto>> Handle(ListAllTodosQuery request, CancellationToken cancellationToken)
 		{
 			var currentAccount = await accountProvider.GetCurrentAsync(cancellationToken);
 

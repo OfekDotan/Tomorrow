@@ -1,0 +1,33 @@
+﻿.very-urgent {
+    color: #720808;
+}
+
+.urgent {
+    color: #E21612;
+}
+
+.not-urgent {
+    color: #F6AA1C;
+}
+
+.sometime {
+    color: #3E8E5A;
+}
+
+.unspecified {
+    color: gray;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.card-title {
+    word-wrap: break-word;
+}
+
+div.card {
+    margin: 5px;
+    font-weight: 500;
+    font-size: 1.25rem;
+}
