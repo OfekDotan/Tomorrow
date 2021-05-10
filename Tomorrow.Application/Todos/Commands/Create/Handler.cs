@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Tomorrow.DomainModel;
+using Tomorrow.DomainModel.Groups;
 using Tomorrow.DomainModel.Todos;
 
 namespace Tomorrow.Application.Todos.Commands.Create
@@ -27,8 +28,8 @@ namespace Tomorrow.Application.Todos.Commands.Create
 				throw new InvalidOperationException("Todo name is required");
 			if (request.Name.Length > 256)
 				throw new InvalidOperationException("Todo name is too long");
-
-			var todo = new Todo(todoId, currentAccount, request.Name, new Priority(request.Priority));
+			var groupId = request.groupId is not null ? new Identifier<Group>(request.groupId.Value) : null;
+			var todo = new Todo(todoId, currentAccount, request.Name, new Priority(request.Priority), groupId);
 			dbContext.Todos.Add(todo);
 			await dbContext.SaveChangesAsync(cancellationToken);
 

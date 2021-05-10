@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Tomorrow.Application.Todos.Commands.Edit
 {
-	public record EditTodoCommand(Guid Id, string Name, int Priority) : IRequest;
+	public record EditTodoCommand(Guid Id, string Name, int Priority, Guid? GroupId) : IRequest;
 }

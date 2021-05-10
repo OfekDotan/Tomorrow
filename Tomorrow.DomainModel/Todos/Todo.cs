@@ -7,7 +7,7 @@ namespace Tomorrow.DomainModel.Todos
 {
 	public class Todo : AggregateRoot<Todo>
 	{
-		public Todo(Identifier<Todo> id, Account account, string name, Priority priority)
+		public Todo(Identifier<Todo> id, Account account, string name, Priority priority, Identifier<Group>? groupId)
 			: base(id)
 		{
 			Name = name;
@@ -15,6 +15,7 @@ namespace Tomorrow.DomainModel.Todos
 			OwnerId = account.Id;
 			Archived = false;
 			Completed = false;
+			GroupId = groupId;
 		}
 
 		private Todo(Identifier<Todo> id) : base(id)

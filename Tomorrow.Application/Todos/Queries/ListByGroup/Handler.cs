@@ -29,10 +29,11 @@ namespace Tomorrow.Application.Todos.Queries.ListByGroup
 					.Where(todo => todo.OwnerId == currentAccount.Id)
 					.Where(todo => todo.GroupId == groupId)
 					.Where(todo => !todo.Archived)
-					.OrderByDescending(t => EF.Property<int>(t.Priority, "priority"))
+					.OrderBy(t => t.Completed ? 1 : 0)
+					.ThenByDescending(t => EF.Property<int>(t.Priority, "priority"))
 					.Skip(request.Offset)
 					.Take(request.Limit)
-					.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32()))
+					.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId))
 					.ToListAsync(cancellationToken);
 
 			return todos.AsReadOnly();

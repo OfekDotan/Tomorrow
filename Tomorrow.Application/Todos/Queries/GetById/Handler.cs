@@ -30,7 +30,8 @@ namespace Tomorrow.Application.Todos.Queries.GetById
 			if (!currentAccount.Id.Equals(todoOwnerId))
 				throw new Exception("Todo not found");
 
-			return new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32());
+			var groupId = todo.GroupId?.ToGuid();
+			return new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, groupId);
 		}
 	}
 }
