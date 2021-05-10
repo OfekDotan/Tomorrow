@@ -1,3 +1,4 @@
+
 <p align="center">
   <h3 align="center">Tomorrow - basic tasks manager</h3>
 </p>
@@ -14,6 +15,11 @@
 
 https://user-images.githubusercontent.com/55891561/117711093-7becc200-b1db-11eb-8fc4-52bea7076b26.mp4
 
+
+Fast workthrough my project structure
+
+
+https://user-images.githubusercontent.com/55891561/117716779-abeb9380-b1e2-11eb-947e-746306294de2.mp4
 
 
 
