@@ -18,8 +18,8 @@ https://user-images.githubusercontent.com/55891561/117711093-7becc200-b1db-11eb-
 
 Fast workthrough my project structure
 
+https://user-images.githubusercontent.com/55891561/117716961-dd645f00-b1e2-11eb-8473-0472eb1f2b03.mp4
 
-https://user-images.githubusercontent.com/55891561/117716779-abeb9380-b1e2-11eb-947e-746306294de2.mp4
 
 
 
