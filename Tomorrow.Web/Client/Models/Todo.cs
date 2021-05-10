@@ -5,6 +5,8 @@ namespace Tomorrow.Web.Client.Models
 {
 	public class Todo
 	{
+		public bool Completed { get; set; }
+		public string GroupId { get; set; }
 		public string Id { get; set; }
 
 		[StringLength(256, ErrorMessage = "Name is too long")]

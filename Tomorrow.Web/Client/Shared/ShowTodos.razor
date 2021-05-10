@@ -1,0 +1,97 @@
+﻿@inject HttpClient HttpClient
+
+<div class="todos">
+    @if (!todos.Any())
+    {
+        if (finishedQuering)
+        {
+            <MudAlert Severity="Severity.Info">
+                You don't have any todos here, let's add one above
+            </MudAlert>
+        }
+        else
+        {
+            <MudAlert Severity="Severity.Normal">
+                Loading todos...
+            </MudAlert>
+        }
+    }
+    else
+    {
+        @foreach (var currentTodo in todos)
+        {
+            <div class="todo">
+                <ShowTodo Todo="@currentTodo" OnDelete="RemoveTodo" OnComplete="TodoCompleted" OnGroupChange="TodoGroupChanged" />
+            </div>
+        }
+
+    }
+</div>
+@code {
+    [Parameter]
+    public string GroupId { get; set; }
+
+    [Parameter]
+    public bool ListAll { get; set; }
+
+    private int loadLimit = 10, loadOffset = 0;
+
+    private List<Todo> todos = new List<Todo>();
+    private bool finishedQuering = false;
+
+    public void AddTodo(Todo todo)
+    {
+        todos.Add(todo);
+        SortTodos();
+        StateHasChanged();
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        finishedQuering = false;
+        todos.Clear();
+        StateHasChanged();
+        loadOffset = 0;
+        while (await LoadMoreTodosAsync()) ;
+        finishedQuering = true;
+        StateHasChanged();
+    }
+
+    private async Task<bool> LoadMoreTodosAsync()
+    {
+        var newTodos = await LoadMoreTodosAsync(loadLimit, loadOffset);
+        todos.AddRange(newTodos);
+
+        StateHasChanged();
+        loadOffset += loadLimit;
+        return newTodos.Count == loadLimit;
+    }
+
+    private async Task<List<Todo>> LoadMoreTodosAsync(int limit, int offset)
+    {
+        var url = $"api/Todos?limit={limit}&offset={offset}&groupId={GroupId}&listAll={ListAll}";
+        var loadedTodos = await HttpClient.GetFromJsonAsync<List<Todo>>(url);
+        return loadedTodos;
+    }
+
+    public void TodoCompleted()
+    {
+        SortTodos();
+        StateHasChanged();
+    }
+
+    private void SortTodos()
+    {
+        todos = todos
+            .OrderBy(x => x.Completed ? 1 : 0)
+            .ThenByDescending(x => x.Priority)
+            .ToList();
+    }
+
+    public void TodoGroupChanged(Todo todo) => RemoveTodo(todo);
+
+    public void RemoveTodo(Todo todo)
+    {
+        todos.Remove(todo);
+        StateHasChanged();
+    }
+}

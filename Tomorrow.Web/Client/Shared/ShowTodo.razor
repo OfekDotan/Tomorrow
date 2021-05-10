@@ -2,7 +2,10 @@
 
 @if (viewMode)
 {
-    <MudCard>
+    string completedClass = "";
+    if (Todo.Completed)
+        completedClass = "completed-task";
+    <MudCard Class="@completedClass">
         <MudCardContent>
             <MudText Typo="Typo.h6" Class="card-title">
                 @Todo.Name
@@ -14,29 +17,53 @@
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Text" Color="Color.Primary" @onclick="ShowEditor">Edit</MudButton>
-            <MudIconButton Icon="@Icons.Material.Filled.Done" Color="Color.Default" />
+            @if (!Todo.Completed)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Done" Color="Color.Default" @onclick="CompleteAsync" />
+            }
             <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="DeleteAsync" />
         </MudCardActions>
     </MudCard>
 }
 else
 {
-    <EditTodo Todo="@Todo" EventCallback="CloseEditorAsync"></EditTodo>
+    <EditTodo Todo="@Todo" AfterEdit="CloseEditorAsync" OnGroupChange="GroupChange"></EditTodo>
 }
 
 @code {
     [Parameter]
     public Todo Todo { get; set; }
+
+    [Parameter]
+    public EventCallback<Todo> OnDelete { get; set; }
+
+    [Parameter]
+    public EventCallback<Todo> OnGroupChange { get; set; }
+
+    [Parameter]
+    public EventCallback OnComplete { get; set; }
     private bool viewMode = true;
 
+    public Task GroupChange()
+    {
+        return OnGroupChange.InvokeAsync(Todo);
+    }
+    public async Task CompleteAsync()
+    {
+        var url = "api/todos/" + Todo.Id + "/complete";
+        Todo.Completed = true;
+        var response = await HttpClient.PutAsJsonAsync(url, Todo);
+        response.EnsureSuccessStatusCode();
+        await OnComplete.InvokeAsync();
+        StateHasChanged();
+    }
     public async Task DeleteAsync()
     {
         string url = "api/todos/" + Todo.Id;
         var response = await HttpClient.DeleteAsync(url);
         response.EnsureSuccessStatusCode();
 
-        Todo = null;
-
+        await OnDelete.InvokeAsync(Todo);
         StateHasChanged();
     }
 
@@ -44,7 +71,6 @@ else
     {
         viewMode = false;
         StateHasChanged();
-
     }
     public async Task CloseEditorAsync()
     {

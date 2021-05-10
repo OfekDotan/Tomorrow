@@ -1,0 +1,19 @@
+﻿@page "/create-todo"
+
+<h3>Create a todo</h3>
+
+<div class="mb-3">
+    <CreateTodo OnCreate="AddTodo"></CreateTodo>
+    <ShowTodos @ref="showTodos"></ShowTodos>
+</div>
+
+@code {
+    private ShowTodos showTodos;
+    private Todo todo = new Todo();
+
+    public void AddTodo(Todo todo)
+    {
+        showTodos.AddTodo(todo);
+    }
+
+}

@@ -1,0 +1,30 @@
+﻿/*.todo {
+    display: inline-block;
+    width: 100%;
+}
+
+.todos {
+    column-width: 250px;
+    column-gap: 0px;
+}*/
+
+.todos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.todo {
+    width: 24%;
+    margin: 5px;
+}
+
+/*
+    .note:hover .note-inner {
+  box-shadow: 0 2px 15px rgba(0,0,0,0.30);
+}
+
+*/

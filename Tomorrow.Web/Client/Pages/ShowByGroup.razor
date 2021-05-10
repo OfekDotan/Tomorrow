@@ -1,0 +1,23 @@
+﻿@page "/groups/{GroupId}"
+
+<h3>Create a todo in this group</h3>
+<div class="mb-3">
+    <CreateTodo @ref="createTodo" OnCreate="AddTodo" GroupId="@GroupId"></CreateTodo>
+    <ShowTodos @ref="showTodos" GroupId="@GroupId"></ShowTodos>
+</div>
+
+@code {
+    private CreateTodo createTodo;
+
+    [Parameter]
+    public string GroupId { get; set; }
+
+    private ShowTodos showTodos;
+    private Todo todo = new Todo();
+
+    public void AddTodo(Todo todo)
+    {
+        showTodos.AddTodo(todo);
+    }
+
+}

@@ -1,4 +1,6 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject HttpClient HttpClient
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Tomorrow.Web</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -8,18 +10,8 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </li>
         <li class="nav-item px-3">
@@ -28,15 +20,23 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="get-todo">
-                <span class="oi oi-plus" aria-hidden="true"></span> Get a todo
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
             <NavLink class="nav-link" href="create-group">
                 <span class="oi oi-plus" aria-hidden="true"></span> Create a Group
             </NavLink>
         </li>
+
+        <MudExpansionPanel Text="Groups" Style="background-color: transparent; color:#d7d7d7">
+            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Text" Size="Size.Small" @onclick="RefreshMenuAsync" Style="color:#d7d7d7" Class="ma-2">Refresh list</MudButton>
+            @foreach (var group in groups)
+            {
+                string groupUrl = "/groups/" + group.Id;
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="@groupUrl">
+                        <span class="oi oi-list" aria-hidden="true"></span> @group.Name
+                    </NavLink>
+                </li>
+            }
+        </MudExpansionPanel>
     </ul>
 </div>
 
@@ -45,8 +45,24 @@
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private List<Group> groups = new List<Group>();
+
+    protected async Task RefreshMenuAsync()
+    {
+        groups.Clear();
+        groups.AddRange(await HttpClient.GetFromJsonAsync<List<Group>>("api/groups?limit=100&offset=0"));
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        groups.AddRange(await HttpClient.GetFromJsonAsync<List<Group>>("api/groups?limit=100&offset=0"));
+        await base.OnInitializedAsync();
+        StateHasChanged();
+    }
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
 }
