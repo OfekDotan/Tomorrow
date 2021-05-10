@@ -18,10 +18,10 @@ https://user-images.githubusercontent.com/55891561/117711093-7becc200-b1db-11eb-
 
 Fast workthrough my project structure
 
-https://user-images.githubusercontent.com/55891561/117716961-dd645f00-b1e2-11eb-8473-0472eb1f2b03.mp4
 
 
 
+https://user-images.githubusercontent.com/55891561/117717632-bb1f1100-b1e3-11eb-9b34-3f61fbe1abef.mp4
 
 
 <!-- GETTING STARTED -->
