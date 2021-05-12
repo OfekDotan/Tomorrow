@@ -81,7 +81,6 @@ namespace Tomorrow.Web.Server
 
 			services.AddAuthentication()
 				.AddIdentityServerJwt();
-
 			services.AddControllersWithViews();
 			services.AddRazorPages();
 

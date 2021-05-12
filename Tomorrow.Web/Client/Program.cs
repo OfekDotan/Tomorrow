@@ -23,6 +23,7 @@ namespace Tomorrow.Web.Client
 
 			builder.Services.AddApiAuthorization();
 
+			builder.Services.AddScoped(typeof(HttpHelper), typeof(HttpHelper));
 			builder.Services.AddMudServices();
 
 			await builder.Build().RunAsync();

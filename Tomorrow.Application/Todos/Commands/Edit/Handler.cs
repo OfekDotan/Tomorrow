@@ -31,7 +31,7 @@ namespace Tomorrow.Application.Todos.Commands.Edit
 
 			var todo = await dbContext.Todos.FindAsync(new object[] { todoId }, cancellationToken);
 			if (todo is null || todo.OwnerId != currentAccount.Id)
-				throw new Exception("Todo not found");
+				throw new Exception("Todo not found"); //FIXME - change to custom exception asap
 
 			todo.Rename(request.Name);
 			todo.ChangePriority(new Priority(request.Priority));
@@ -43,7 +43,7 @@ namespace Tomorrow.Application.Todos.Commands.Edit
 				var groupId = new Identifier<Group>(request.GroupId.Value);
 				var group = await dbContext.Groups.FindAsync(new object[] { groupId }, cancellationToken);
 				if (group is null || group.OwnerId != currentAccount.Id)
-					throw new Exception("Group not found");
+					throw new Exception("Group not found"); //FIXME - change to custom exception asap
 				todo.AddTo(group);
 			}
 

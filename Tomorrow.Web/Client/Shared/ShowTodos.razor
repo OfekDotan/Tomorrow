@@ -1,5 +1,5 @@
 ﻿@inject HttpClient HttpClient
-
+@inherits OwningComponentBase<HttpHelper>
 <div class="todos">
     @if (!todos.Any())
     {
@@ -68,8 +68,7 @@
 
     private async Task<List<Todo>> LoadMoreTodosAsync(int limit, int offset)
     {
-        var url = $"api/Todos?limit={limit}&offset={offset}&groupId={GroupId}&listAll={ListAll}";
-        var loadedTodos = await HttpClient.GetFromJsonAsync<List<Todo>>(url);
+        var loadedTodos = await Service.LoadMoreTodosAsync(limit, offset, GroupId, ListAll);
         return loadedTodos;
     }
 

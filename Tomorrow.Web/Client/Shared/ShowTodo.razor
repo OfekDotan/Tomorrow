@@ -1,4 +1,5 @@
 ﻿@inject HttpClient HttpClient
+@inherits OwningComponentBase<HttpHelper>
 
 @if (viewMode)
 {
@@ -50,18 +51,13 @@ else
     }
     public async Task CompleteAsync()
     {
-        var url = "api/todos/" + Todo.Id + "/complete";
-        Todo.Completed = true;
-        var response = await HttpClient.PutAsJsonAsync(url, Todo);
-        response.EnsureSuccessStatusCode();
+        await Service.CompleteAsync(Todo);
         await OnComplete.InvokeAsync();
         StateHasChanged();
     }
     public async Task DeleteAsync()
     {
-        string url = "api/todos/" + Todo.Id;
-        var response = await HttpClient.DeleteAsync(url);
-        response.EnsureSuccessStatusCode();
+        Service.DeleteTodoAsync(Todo);
 
         await OnDelete.InvokeAsync(Todo);
         StateHasChanged();

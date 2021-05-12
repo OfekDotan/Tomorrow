@@ -17,7 +17,6 @@ namespace Tomorrow.DomainModel.Groups
 		}
 
 		public bool Archived { get; private set; }
-
 		public string Name { get; }
 
 		public Identifier<Account> OwnerId { get; }

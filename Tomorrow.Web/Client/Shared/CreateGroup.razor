@@ -1,7 +1,5 @@
-﻿@page "/create-group"
-@inject HttpClient HttpClient
+﻿@inherits OwningComponentBase<HttpHelper>
 
-<h3>Create a group</h3>
 <div class="mb-3">
     <EditForm Model="@group" OnValidSubmit="@CreateAsync">
         @if (created)
@@ -25,8 +23,7 @@
     private bool created = false;
     public async Task CreateAsync()
     {
-        var response = await HttpClient.PostAsJsonAsync("api/groups", group);
-        response.EnsureSuccessStatusCode();
+        await Service.CreateGroupAsync(group);
         created = true;
         group = new Group();
         StateHasChanged();

@@ -1,45 +1,28 @@
 ﻿@inject HttpClient HttpClient
+@inherits OwningComponentBase<HttpHelper>
 
-<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Tomorrow.Web</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="create-todo">
-                <span class="oi oi-plus" aria-hidden="true"></span> Create a todo
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="create-group">
-                <span class="oi oi-plus" aria-hidden="true"></span> Create a Group
-            </NavLink>
-        </li>
-
-        <MudExpansionPanel Text="Groups" Style="background-color: transparent; color:#d7d7d7">
-            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Text" Size="Size.Small" @onclick="RefreshMenuAsync" Style="color:#d7d7d7" Class="ma-2">Refresh list</MudButton>
-            @foreach (var group in groups)
-            {
-                string groupUrl = "/groups/" + group.Id;
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="@groupUrl">
-                        <span class="oi oi-list" aria-hidden="true"></span> @group.Name
-                    </NavLink>
-                </li>
-            }
-        </MudExpansionPanel>
-    </ul>
-</div>
-
+<MudPaper Class="d-inline-flex py-3" Square="true">
+    <MudNavMenu Class="mud-width-full">
+        <MudText Typo="Typo.h6" Class="px-4">Tomorrow</MudText>
+        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Your best task planner</MudText>
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/create-todo" Icon="@Icons.Filled.Dashboard">Create a todo</MudNavLink>
+        <MudNavLink Href="/create-todo" Icon="@Icons.Filled._7kPlus">Create a todo</MudNavLink>
+        <MudNavLink Href="/create-group" Icon="@Icons.Filled.Storage">Create a Group</MudNavLink>
+        <MudNavLink Href="/billing" Icon="@Icons.Filled.Receipt" Disabled="true">Billing</MudNavLink>
+        <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="true">
+            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Text" Size="Size.Small" @onclick="RefreshMenuAsync" @*Style="color:#d7d7d7" *@ Class="ma-2">Refresh list</MudButton>
+            <MudGrid>
+                @foreach (var group in groups)
+                {
+                    <ShowGroupOnNav group="group"></ShowGroupOnNav>
+                }
+            </MudGrid>
+            <MudNavLink Href="/users" Icon="@Icons.Filled.People" IconColor="Color.Success">Users</MudNavLink>
+            <MudNavLink Href="/security" Icon="@Icons.Filled.Security" IconColor="Color.Info">Security</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudPaper>
 @code {
     private bool collapseNavMenu = true;
 
@@ -50,13 +33,13 @@
     protected async Task RefreshMenuAsync()
     {
         groups.Clear();
-        groups.AddRange(await HttpClient.GetFromJsonAsync<List<Group>>("api/groups?limit=100&offset=0"));
+        groups.AddRange(await Service.GetGroupsAsync());
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
     {
-        groups.AddRange(await HttpClient.GetFromJsonAsync<List<Group>>("api/groups?limit=100&offset=0"));
         await base.OnInitializedAsync();
+        groups.AddRange(await Service.GetGroupsAsync());
         StateHasChanged();
     }
 

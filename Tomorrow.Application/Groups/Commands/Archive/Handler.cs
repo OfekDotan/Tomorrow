@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tomorrow.Application.Groups.Commands.Delete;
-using Tomorrow.Application.Todos.Commands.Archive;
+using Tomorrow.DomainModel;
+using Tomorrow.DomainModel.Groups;
 
 namespace Tomorrow.Application.Groups.Commands.Archive
 {
@@ -22,8 +23,9 @@ namespace Tomorrow.Application.Groups.Commands.Archive
 
 		public async Task<Unit> Handle(ArchiveGroupCommand request, CancellationToken cancellationToken)
 		{
+			var groupId = new Identifier<Group>(request.groupId);
 			var account = await accountProvider.GetCurrentAsync(cancellationToken);
-			var group = await dbContext.Groups.FindAsync(new object[] { request.groupId }, cancellationToken);
+			var group = await dbContext.Groups.FindAsync(new object[] { groupId }, cancellationToken);
 
 			if (group is null)
 				throw new Exception("Group not found");

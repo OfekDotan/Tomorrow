@@ -35,7 +35,7 @@ namespace Tomorrow.Web.Server.Controllers
 		{
 			if (id != command.TodoId)
 			{
-				throw new Exception("Url id param and request doesn't match");
+				throw new Exception("Url id param and request doesn't match"); // FIXME - Change to custom exception ASAP
 			}
 
 			await requestSender.Send(command);

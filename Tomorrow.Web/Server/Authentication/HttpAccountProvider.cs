@@ -25,7 +25,7 @@ namespace Tomorrow.Web.Server.Authentication
 		{
 			var httpContext = httpContextAccessor.HttpContext;
 			if (httpContext is null)
-				throw new Exception("There is no current HttpContext");
+				throw new NotAuthenticatedException("Account not found");
 
 			if (!httpContext.User.IsAuthenticated())
 				throw new NotAuthenticatedException();
@@ -34,7 +34,7 @@ namespace Tomorrow.Web.Server.Authentication
 			var currentUserId = new Identifier<Account>(Guid.Parse(textUserId));
 			var currentAccount = await dbContext.Accounts.FindAsync(new object[] { currentUserId }, cancellationToken);
 			if (currentAccount is null)
-				throw new Exception("Account not found");
+				throw new NotAuthenticatedException("Account not found");
 			return currentAccount;
 		}
 	}

@@ -1,4 +1,6 @@
 ﻿@inject HttpClient HttpClient
+@inherits OwningComponentBase<HttpHelper>
+
 <EditForm Model="@Todo" OnValidSubmit="EditAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -34,7 +36,7 @@
     protected override async Task OnInitializedAsync()
     {
         todoOriginalGroupId = Todo.GroupId;
-        groups.AddRange(await GetGroupsAsync());
+        groups.AddRange(await Service.GetGroupsAsync());
         StateHasChanged();
     }
 
@@ -43,16 +45,9 @@
         Todo.GroupId = null;
     }
 
-    public async Task<List<Group>> GetGroupsAsync()
-    {
-        return await HttpClient.GetFromJsonAsync<List<Group>>("api/groups?limit=100&offset=0");
-    }
-
     public async Task EditAsync()
     {
-        var url = "api/todos/" + Todo.Id;
-        var response = await HttpClient.PutAsJsonAsync(url, Todo);
-        response.EnsureSuccessStatusCode();
+        await Service.EditTodoAsync(Todo);
         await AfterEdit.InvokeAsync();
         if (todoOriginalGroupId != Todo.GroupId)
             await OnGroupChange.InvokeAsync();
