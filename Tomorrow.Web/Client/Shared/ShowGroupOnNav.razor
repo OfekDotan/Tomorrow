@@ -1,19 +1,10 @@
 ﻿@inherits OwningComponentBase<HttpHelper>
 
-<MudItem xs="10">
-    @{
-        string groupUrl = "/groups/" + group.Id;
-    }
-    @*<li class="nav-item px-3">
-            <NavLink class="nav-link" href="@groupUrl">
-                <span class="oi oi-list" aria-hidden="true"></span> @group.Name
-            </NavLink>
-        </li>*@
-    <MudNavLink Href="@groupUrl" Icon="@Icons.Filled.List" IconColor="Color.Success">@group.Name</MudNavLink>
-</MudItem>
-@*<MudItem xs="2">
-        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteGroupAsync"></MudIconButton>
-    </MudItem>*@
+@{
+    string groupUrl = "/groups/" + group.Id;
+}
+
+<MudNavLink Href="@groupUrl" Icon="@Icons.Filled.List" IconColor="Color.Success">@group.Name</MudNavLink>
 
 @code {
     [Parameter]

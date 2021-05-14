@@ -10,8 +10,8 @@
         <MudNavLink Href="/create-todo" Icon="@Icons.Filled._7kPlus">Create a todo</MudNavLink>
         <MudNavLink Href="/create-group" Icon="@Icons.Filled.Storage">Create a Group</MudNavLink>
         <MudNavLink Href="/billing" Icon="@Icons.Filled.Receipt" Disabled="true">Billing</MudNavLink>
-        <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="true">
-            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Text" Size="Size.Small" @onclick="RefreshMenuAsync" @*Style="color:#d7d7d7" *@ Class="ma-2">Refresh list</MudButton>
+        <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="false" @onclick="RefreshMenuAsync">
+            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Text" Size="Size.Small" @onclick="RefreshMenuAsync" Class="ma-2">Refresh list</MudButton>
             <MudGrid>
                 @foreach (var group in groups)
                 {
