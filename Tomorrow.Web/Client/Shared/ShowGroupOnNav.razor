@@ -5,7 +5,7 @@
     string groupUrl = "/groups/" + group.Id;
 }
 <div class="d-flex justify-space-between">
-    <MudNavLink Href="@groupUrl" Icon="@Icons.Filled.List" IconColor="Color.Success">
+    <MudNavLink Href="@groupUrl" Icon="@Icons.Filled.List">
         @group.Name
     </MudNavLink>
     <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Medium" OnClick="OpenDeleteDialogAsync" Class="mr-2"></MudIconButton>
