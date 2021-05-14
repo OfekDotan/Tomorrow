@@ -6,16 +6,18 @@
 
 <AuthorizeView>
     <Authorized>
-        <a href="authentication/profile">Hello, @context.User.Identity.Name!</a>
-        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+        <MudButton Link="authentication/profile" Style="@whiteColor">Connected as @context.User.Identity.Name</MudButton>
+        <MudButton OnClick="BeginSignOut" Style="@whiteColor">Log out</MudButton>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Log in</a>
+        <MudButton Link="authentication/register" Style="@whiteColor">Register</MudButton>
+        <MudButton Link="authentication/login" Style="@whiteColor">Log in</MudButton>
     </NotAuthorized>
 </AuthorizeView>
 
 @code{
+    private string whiteColor = $"color:{Colors.Shades.White};";
+
     private async Task BeginSignOut(MouseEventArgs args)
     {
         await SignOutManager.SetSignOutState();

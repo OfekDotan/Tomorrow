@@ -1,21 +1,40 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudLayout>
 
-    <div class="main">
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+    <MudThemeProvider />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    <MudAppBar Color="Color.Primary" Fixed="false">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleSideBar" />
+        <MudText Style="@whiteColor">Tomorrow</MudText>
+        <MudAppBarSpacer />
+        <LoginDisplay />
+        <MudAppBarSpacer />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/yotamss/Tomorrow" Target="_blank" />
+    </MudAppBar>
 
-        <div class="content px-4">
-            <MudThemeProvider />
-            <MudDialogProvider />
-            <MudSnackbarProvider />
+    <MudDrawer @bind-Open="@sideBarOpen" DisableOverlay="true" Elevation="1" Variant="@DrawerVariant.Responsive">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6" Class="px-4">Tomorrow</MudText>
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Your best task planner</MudText>
+        </MudDrawerHeader>
+        <NavMenu></NavMenu>
+    </MudDrawer>
+
+    <MudMainContent Class="pt-16 px-16">
+        <MudContainer Class="mt-6">
             @Body
-        </div>
-    </div>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code{
+    private string whiteColor = $"color:{Colors.Shades.White};";
+
+    private bool sideBarOpen;
+    private void ToggleSideBar()
+    {
+        sideBarOpen = !sideBarOpen;
+    }
+}

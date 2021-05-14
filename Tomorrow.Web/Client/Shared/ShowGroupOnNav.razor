@@ -1,14 +1,26 @@
-﻿@inherits OwningComponentBase<HttpHelper>
+﻿@inject IDialogService DialogService
+@inherits OwningComponentBase<HttpHelper>
 
 @{
     string groupUrl = "/groups/" + group.Id;
 }
-
-<MudNavLink Href="@groupUrl" Icon="@Icons.Filled.List" IconColor="Color.Success">@group.Name</MudNavLink>
+<div class="d-flex justify-space-between">
+    <MudNavLink Href="@groupUrl" Icon="@Icons.Filled.List" IconColor="Color.Success">
+        @group.Name
+    </MudNavLink>
+    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Medium" OnClick="OpenDeleteDialogAsync" Class="mr-2"></MudIconButton>
+</div>
 
 @code {
     [Parameter]
     public Group group { get; set; }
+
+    private async Task OpenDeleteDialogAsync()
+    {
+        var result = await DialogService.ShowMessageBox("Delete " + group.Name, "Delete group?", "Delete", cancelText: "Cancel");
+        if (result is not null && result.Value)
+            await DeleteGroupAsync();
+    }
 
     private async Task DeleteGroupAsync()
     {

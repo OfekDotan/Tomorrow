@@ -1,51 +1,43 @@
 ﻿@inject HttpClient HttpClient
 @inherits OwningComponentBase<HttpHelper>
 
-<MudPaper Class="d-inline-flex py-3" Square="true">
-    <MudNavMenu Class="mud-width-full">
-        <MudText Typo="Typo.h6" Class="px-4">Tomorrow</MudText>
-        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Your best task planner</MudText>
-        <MudDivider Class="my-2" />
-        <MudNavLink Href="/create-todo" Icon="@Icons.Filled.Dashboard">Create a todo</MudNavLink>
-        <MudNavLink Href="/create-todo" Icon="@Icons.Filled._7kPlus">Create a todo</MudNavLink>
-        <MudNavLink Href="/create-group" Icon="@Icons.Filled.Storage">Create a Group</MudNavLink>
-        <MudNavLink Href="/billing" Icon="@Icons.Filled.Receipt" Disabled="true">Billing</MudNavLink>
-        <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="false" @onclick="RefreshMenuAsync">
-            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Text" Size="Size.Small" @onclick="RefreshMenuAsync" Class="ma-2">Refresh list</MudButton>
-            <MudGrid>
+<MudNavMenu Class="mud-width-full">
+    <MudNavLink Href="/dashboard" Icon="@Icons.Filled.Dashboard">DashBoard</MudNavLink>
+    <MudNavLink Href="/create-todo" Icon="@Icons.Filled.AddTask">Create a todo</MudNavLink>
+    <MudNavLink Href="/create-group" Icon="@Icons.Filled.PlaylistAdd">Create a Group</MudNavLink>
+    <AuthorizeView>
+        <Authorized>
+            <MudNavGroup Title="Groups" Icon="@Icons.Filled.ViewList" Expanded="navMenuGroupsOpen" ExpandedChanged="RefreshMenuAsync">
                 @foreach (var group in groups)
                 {
                     <ShowGroupOnNav group="group"></ShowGroupOnNav>
                 }
-            </MudGrid>
-            <MudNavLink Href="/users" Icon="@Icons.Filled.People" IconColor="Color.Success">Users</MudNavLink>
-            <MudNavLink Href="/security" Icon="@Icons.Filled.Security" IconColor="Color.Info">Security</MudNavLink>
-        </MudNavGroup>
-    </MudNavMenu>
-</MudPaper>
-@code {
-    private bool collapseNavMenu = true;
+            </MudNavGroup>
+        </Authorized>
+    </AuthorizeView>
+</MudNavMenu>
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+@code {
+    private bool navMenuGroupsOpen = false;
 
     private List<Group> groups = new List<Group>();
 
     protected async Task RefreshMenuAsync()
     {
-        groups.Clear();
-        groups.AddRange(await Service.GetGroupsAsync());
-        StateHasChanged();
+        navMenuGroupsOpen = !navMenuGroupsOpen;
+        if (navMenuGroupsOpen)
+        {
+            groups.Clear();
+            groups.AddRange(await Service.GetGroupsAsync());
+        }
+
     }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        groups.AddRange(await Service.GetGroupsAsync());
-        StateHasChanged();
-    }
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
+        @*groups.AddRange(await Service.GetGroupsAsync());
+            StateHasChanged();*@
     }
 
 }
