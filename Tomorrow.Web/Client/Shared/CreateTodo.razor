@@ -10,15 +10,17 @@
     }
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <InputText class="form-control" id="name" @bind-Value="@todo.Name" />
+
+    <MudTextField Label="Name" Variant="Variant.Outlined" @bind-Value="@todo.Name" />
+    <MudSlider T="int" Min="0" Max="10" Step="1" @bind-Value="todo.Priority" Color="Color.Tertiary">
+        Priority
+    </MudSlider>
+    <div class="d-flex justify-space-between align-items-center mb-3">
+        <MudText Color="Color.Success">Not important</MudText>
+        <MudText Color="Color.Error">Very important</MudText>
     </div>
-    <div class="mb-3">
-        <label for="name" class="form-label">Priority</label>
-        <InputNumber class="form-control" id="priority" @bind-Value="@todo.Priority" />
-    </div>
-    <button class="btn btn-primary mb-3" type="submit">Submit</button>
+
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mb-3">Create</MudButton>
 </EditForm>
 @code {
     [Parameter]
@@ -30,7 +32,6 @@
 
     public async Task CreateAsync()
     {
-
         todo.GroupId = GroupId;
         todo = await Service.CreateTodoAsync(todo);
         created = true;
