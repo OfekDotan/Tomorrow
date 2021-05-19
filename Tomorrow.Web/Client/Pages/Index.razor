@@ -2,4 +2,11 @@
 @page "/dashboard"
 
 <MudText Typo="Typo.h3">Dashboard</MudText>
-<ShowTodos />
+<AuthorizeView>
+    <Authorized>
+        <ShowTodos />
+    </Authorized>
+    <NotAuthorized>
+        <MudText Typo="Typo.h2">Hey! you need to log in to access this page</MudText>
+    </NotAuthorized>
+</AuthorizeView>

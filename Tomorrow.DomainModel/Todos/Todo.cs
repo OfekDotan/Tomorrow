@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Tomorrow.DomainModel.Accounts;
 using Tomorrow.DomainModel.Groups;
@@ -7,8 +8,11 @@ namespace Tomorrow.DomainModel.Todos
 {
 	public class Todo : AggregateRoot<Todo>
 	{
+		public readonly List<Account> accountsThatCanEdit = new List<Account>();
+		public readonly List<Account> accountsThatCanView = new List<Account>();
+
 		public Todo(Identifier<Todo> id, Account account, string name, Priority priority, Identifier<Group>? groupId)
-			: base(id)
+					: base(id)
 		{
 			Name = name;
 			Priority = priority;

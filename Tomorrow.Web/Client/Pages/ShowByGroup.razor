@@ -1,10 +1,16 @@
 ﻿@page "/groups/{GroupId}"
 
 <h3>Create a todo in this group</h3>
-<div class="mb-3">
-    <CreateTodo @ref="createTodo" OnCreate="AddTodo" GroupId="@GroupId"></CreateTodo>
-    <ShowTodos @ref="showTodos" GroupId="@GroupId"></ShowTodos>
-</div>
+
+<AuthorizeView>
+    <Authorized>
+        <CreateTodo @ref="createTodo" OnCreate="AddTodo" GroupId="@GroupId"></CreateTodo>
+        <ShowTodos @ref="showTodos" GroupId="@GroupId"></ShowTodos>
+    </Authorized>
+    <NotAuthorized>
+        <MudText Typo="Typo.h2">Hey! you need to log in to access this page</MudText>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private CreateTodo createTodo;

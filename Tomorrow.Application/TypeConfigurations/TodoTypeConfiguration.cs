@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tomorrow.DomainModel;
 using Tomorrow.DomainModel.Accounts;
@@ -30,6 +31,40 @@ namespace Tomorrow.Application.TypeConfigurations
 			builder
 				.Property(t => t.Name)
 				.HasMaxLength(256);
+
+			builder
+				.HasMany(t => t.accountsThatCanEdit)
+				.WithMany(a => a.EditableTodos)
+				.UsingEntity<Dictionary<string, object>>("TodoEditPermissions", j =>
+				  {
+					  return j
+					   .HasOne<Account>()
+					   .WithMany()
+					   .OnDelete(DeleteBehavior.ClientCascade);
+				  }, j =>
+				  {
+					  return j
+					  .HasOne<Todo>()
+					  .WithMany()
+					  .OnDelete(DeleteBehavior.ClientCascade);
+				  });
+
+			builder
+				.HasMany(t => t.accountsThatCanView)
+				.WithMany(a => a.ViewableTodos)
+				.UsingEntity<Dictionary<string, object>>("TodoViewPermissions", j =>
+				{
+					return j
+					 .HasOne<Account>()
+					 .WithMany()
+					 .OnDelete(DeleteBehavior.ClientCascade);
+				}, j =>
+				{
+					return j
+					.HasOne<Todo>()
+					.WithMany()
+					.OnDelete(DeleteBehavior.ClientCascade);
+				});
 		}
 	}
 }

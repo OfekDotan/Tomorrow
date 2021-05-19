@@ -2,4 +2,11 @@
 @inject HttpClient HttpClient
 
 <h3>Create a group</h3>
-<CreateGroup></CreateGroup>
+<AuthorizeView>
+    <Authorized>
+        <CreateGroup></CreateGroup>
+    </Authorized>
+    <NotAuthorized>
+        <MudText Typo="Typo.h2">Hey! you need to log in to access this page</MudText>
+    </NotAuthorized>
+</AuthorizeView>

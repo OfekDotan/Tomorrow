@@ -15,6 +15,20 @@ namespace Tomorrow.Web.Client
 
 		public HttpClient HttpClient { get; set; }
 
+		public async Task AddEditorAsync(Todo todo, string email)
+		{
+			var url = "api/todos/" + todo.Id + "/add-editor";
+			var response = await HttpClient.PutAsJsonAsync(url, new { todo.Id, Email = email });
+			response.EnsureSuccessStatusCode();
+		}
+
+		public async Task AddViewerAsync(Todo todo, string email)
+		{
+			var url = "api/todos/" + todo.Id + "/add-viewer";
+			var response = await HttpClient.PutAsJsonAsync(url, new { todo.Id, Email = email });
+			response.EnsureSuccessStatusCode();
+		}
+
 		public async Task CompleteAsync(Todo todo)
 		{
 			var url = "api/todos/" + todo.Id + "/complete";

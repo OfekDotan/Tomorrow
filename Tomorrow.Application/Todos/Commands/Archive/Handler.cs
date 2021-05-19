@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Tomorrow.DomainModel;
 using Tomorrow.DomainModel.Todos;
 
@@ -22,12 +23,15 @@ namespace Tomorrow.Application.Todos.Commands.Archive
 		{
 			var account = await accountProvider.GetCurrentAsync(cancellationToken);
 			var todoId = new Identifier<Todo>(request.TodoId);
-			var todo = await dbContext.Todos.FindAsync(new object[] { todoId }, cancellationToken);
+			var todo = await dbContext.Todos
+				.Include(t => t.accountsThatCanEdit)
+				.Include(t => t.accountsThatCanView)
+				.SingleOrDefaultAsync(t => t.Id == todoId, cancellationToken);
 
 			if (todo is null)
 				throw new Exception("Todo not found");
 
-			if (todo.OwnerId != account.Id)
+			if (!todo.CanEdit(account))
 				throw new Exception("Not authorized");
 
 			todo.Archive();

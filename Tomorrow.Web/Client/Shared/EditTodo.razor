@@ -7,7 +7,7 @@
     <MudTextField Label="Name" Variant="Variant.Outlined" @bind-Value="@Todo.Name">
     </MudTextField>
     <MudNumericField @bind-Value="@Todo.Priority" Label="Priority" Variant="Variant.Outlined" Step="1" />
-    <MudSelect T="string" Label="Select a group or leave empty" @bind-Value="@Todo.GroupId">
+    <MudSelect T="string" Label="Select a group or leave empty" @bind-Value="@Todo.GroupId" Variant="Variant.Outlined">
         @foreach (var group in groups)
         {
             <MudSelectItem Value="@group.Id">
@@ -15,8 +15,14 @@
             </MudSelectItem>
         }
     </MudSelect>
-    <MudButton Variant="Variant.Outlined" Color="Color.Primary" ButtonType="ButtonType.Submit">Save</MudButton>
-    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" ButtonType="ButtonType.Button" OnClick="ResetGroup">Clear group selected</MudButton>
+    <MudText Typo="Typo.subtitle2">Add editor</MudText>
+    <AddEditorEmail todo="@Todo"></AddEditorEmail>
+    <MudText Typo="Typo.subtitle2">Add viewer</MudText>
+    <AddViewerEmail todo="@Todo"></AddViewerEmail>
+    <div class="mt-2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" ButtonType="ButtonType.Submit">Save</MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" ButtonType="ButtonType.Button" OnClick="ResetGroup">Clear group selected</MudButton>
+    </div>
 </EditForm>
 
 @code {

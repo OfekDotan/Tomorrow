@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Tomorrow.DomainModel;
 using Tomorrow.DomainModel.Groups;
 using Tomorrow.DomainModel.Todos;
@@ -29,8 +30,12 @@ namespace Tomorrow.Application.Todos.Commands.Edit
 			if (request.Name.Length > 256)
 				throw new InvalidOperationException("Todo name is too long");
 
-			var todo = await dbContext.Todos.FindAsync(new object[] { todoId }, cancellationToken);
-			if (todo is null || todo.OwnerId != currentAccount.Id)
+			var todo = await dbContext.Todos
+				.Include(t => t.accountsThatCanEdit)
+				.Include(t => t.accountsThatCanView)
+				.SingleOrDefaultAsync(t => t.Id == todoId, cancellationToken);
+
+			if (todo is null || !todo.CanEdit(currentAccount))
 				throw new Exception("Todo not found"); //FIXME - change to custom exception asap
 
 			todo.Rename(request.Name);

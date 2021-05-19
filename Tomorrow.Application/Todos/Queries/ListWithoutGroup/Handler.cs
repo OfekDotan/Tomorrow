@@ -24,17 +24,22 @@ namespace Tomorrow.Application.Todos.Queries.ListWithoutGroup
 
 			var todos = await customDbContext.Todos
 					.AsNoTracking()
-					.Where(todo => todo.OwnerId == currentAccount.Id)
 					.Where(todo => !todo.Archived)
 					.Where(todo => todo.GroupId == null)
 					.OrderBy(t => t.Completed ? 1 : 0)
 					.ThenByDescending(t => EF.Property<int>(t.Priority, "priority"))
-					.Skip(request.Offset)
-					.Take(request.Limit)
-					.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId))
+					.Include(t => t.accountsThatCanEdit)
+					.Include(t => t.accountsThatCanView)
 					.ToListAsync(cancellationToken);
 
-			return todos.AsReadOnly();
+			var todoDtos = todos
+			.Where(t => t.CanView(currentAccount))
+			.Skip(request.Offset)
+			.Take(request.Limit)
+			.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId, false))
+			.ToList();
+
+			return todoDtos.AsReadOnly();
 		}
 	}
 }

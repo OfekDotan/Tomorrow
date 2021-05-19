@@ -1,0 +1,23 @@
+﻿@inject HttpHelper HttpHelper
+
+<EditForm Model="@Permission" OnValidSubmit="AddEditorAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <MudTextField Label="User email" Variant="Variant.Outlined" @bind-Value="@Permission.Email">
+    </MudTextField>
+    <MudButton Variant="Variant.Outlined" Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Todo Todo { get; set; }
+
+    public Permission Permission { get; set; } = new Permission();
+
+    public async Task AddEditorAsync()
+    {
+        await HttpHelper.AddEditorAsync(Todo, Permission.Email);
+        Permission.Email = "";
+        StateHasChanged();
+    }
+}

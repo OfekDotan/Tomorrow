@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Tomorrow.Application.Todos;
+using Tomorrow.Application.Todos.Commands.AddEditPermission;
 using Tomorrow.Application.Todos.Commands.AddToGroup;
+using Tomorrow.Application.Todos.Commands.AddViewPermission;
 using Tomorrow.Application.Todos.Commands.Archive;
 using Tomorrow.Application.Todos.Commands.Complete;
 using Tomorrow.Application.Todos.Commands.Create;
@@ -27,6 +29,34 @@ namespace Tomorrow.Web.Server.Controllers
 		public TodosController(ISender requestSender)
 		{
 			this.requestSender = requestSender;
+		}
+
+		// PUT api/<TodosController>/5/add-viewer
+		[HttpPut("{id}/add-viewer")]
+		public async Task<IActionResult> AddEditorsAsync(Guid id, [FromBody] AddViewPermissionsCommand command)
+		{
+			if (id != command.Id)
+			{
+				throw new Exception("Url id param and request doesn't match");
+			}
+
+			await requestSender.Send(command);
+
+			return NoContent();
+		}
+
+		// PUT api/<TodosController>/5/add-editor
+		[HttpPut("{id}/add-editor")]
+		public async Task<IActionResult> AddEditorsAsync(Guid id, [FromBody] AddEditPermissionsCommand command)
+		{
+			if (id != command.Id)
+			{
+				throw new Exception("Url id param and request doesn't match");
+			}
+
+			await requestSender.Send(command);
+
+			return NoContent();
 		}
 
 		// PUT api/<TodosController>/5
