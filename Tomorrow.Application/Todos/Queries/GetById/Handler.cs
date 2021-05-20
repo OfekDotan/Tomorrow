@@ -30,7 +30,7 @@ namespace Tomorrow.Application.Todos.Queries.GetById
 			if (todo is null || todo.Archived)
 				throw new Exception("Todo not found");
 			var currentAccount = await accountProvider.GetCurrentAsync(cancellationToken);
-			if (!todo.CanView(currentAccount))
+			if (!todo.IsOwner(currentAccount))
 				throw new Exception("Todo not found");
 
 			var groupId = todo.GroupId?.ToGuid();

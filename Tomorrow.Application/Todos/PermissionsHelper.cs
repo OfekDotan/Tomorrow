@@ -11,10 +11,22 @@ namespace Tomorrow.Application.Todos
 			return account.Id == todoOwnerId || todo.accountsThatCanEdit.Contains(account);
 		}
 
-		public static bool CanView(this Todo todo, Account account)
+		public static bool CanEditOnly(this Todo todo, Account account)
 		{
 			var todoOwnerId = todo.OwnerId;
-			return account.Id == todoOwnerId || todo.accountsThatCanView.Contains(account) || todo.accountsThatCanEdit.Contains(account);
+			return todo.accountsThatCanEdit.Contains(account);
+		}
+
+		public static bool CanViewOnly(this Todo todo, Account account)
+		{
+			var todoOwnerId = todo.OwnerId;
+			return account.Id == todoOwnerId || todo.accountsThatCanView.Contains(account);
+		}
+
+		public static bool IsOwner(this Todo todo, Account account)
+		{
+			var todoOwnerId = todo.OwnerId;
+			return account.Id == todoOwnerId;
 		}
 	}
 }

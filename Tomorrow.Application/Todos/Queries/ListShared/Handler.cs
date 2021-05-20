@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tomorrow.Application.Todos.Queries.ListWithoutGroup
+namespace Tomorrow.Application.Todos.Queries.ListShared
 {
-	internal class Handler : IRequestHandler<ListTodosWithoutGroupQuery, IReadOnlyList<TodoDto>>
+	internal class Handler : IRequestHandler<ListSharedTodosQuery, IReadOnlyList<TodoDto>>
 	{
 		private readonly IAccountProvider accountProvider;
 		private readonly CustomDbContext customDbContext;
@@ -18,28 +18,31 @@ namespace Tomorrow.Application.Todos.Queries.ListWithoutGroup
 			this.customDbContext = customDbContext;
 		}
 
-		public async Task<IReadOnlyList<TodoDto>> Handle(ListTodosWithoutGroupQuery request, CancellationToken cancellationToken)
+		public async Task<IReadOnlyList<TodoDto>> Handle(ListSharedTodosQuery request, CancellationToken cancellationToken)
 		{
 			var currentAccount = await accountProvider.GetCurrentAsync(cancellationToken);
-
 			var todos = await customDbContext.Todos
 					.AsNoTracking()
 					.Where(todo => !todo.Archived)
-					.Where(todo => todo.GroupId == null)
 					.OrderBy(t => t.Completed ? 1 : 0)
 					.ThenByDescending(t => EF.Property<int>(t.Priority, "priority"))
 					.Include(t => t.accountsThatCanEdit)
 					.Include(t => t.accountsThatCanView)
 					.ToListAsync(cancellationToken);
 
-			var todoDtos = todos
-			.Where(t => t.IsOwner(currentAccount))
-			.Skip(request.Offset)
-			.Take(request.Limit)
-			.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId, false))
-			.ToList();
+			var todoDtosViews = todos
+				.Where(t => t.CanViewOnly(currentAccount))
+				.Skip(request.Offset)
+				.Take(request.Limit)
+				.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId, true));
 
-			return todoDtos.AsReadOnly();
+			var todoDtosEdit = todos
+				.Where(t => t.CanEditOnly(currentAccount))
+				.Skip(request.Offset)
+				.Take(request.Limit)
+				.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId, false));
+
+			return todoDtosEdit.Union(todoDtosViews).ToList().AsReadOnly();
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace Tomorrow.Application.Todos.Queries.ListAll
 					.ToListAsync(cancellationToken);
 
 			var todoDtos = todos
-				.Where(t => t.CanView(currentAccount))
+				.Where(t => t.IsOwner(currentAccount))
 				.Skip(request.Offset)
 				.Take(request.Limit)
 				.Select(todo => new TodoDto(todo.Id.ToGuid(), todo.Name, todo.Priority.ToInt32(), todo.Completed, todo.GroupId, false))
