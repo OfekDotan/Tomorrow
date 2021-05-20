@@ -77,9 +77,9 @@ namespace Tomorrow.Web.Client
 			return await HttpClient.GetFromJsonAsync<List<Group>>("api/groups?limit=100&offset=0");
 		}
 
-		public async Task<List<Todo>> LoadMoreTodosAsync(int limit, int offset, string groupId, bool listAll)
+		public async Task<List<Todo>> LoadMoreTodosAsync(int limit, int offset, string groupId, bool listShared)
 		{
-			var url = $"api/Todos?limit={limit}&offset={offset}&groupId={groupId}&listAll={listAll}";
+			var url = $"api/Todos?limit={limit}&offset={offset}&groupId={groupId}&listShared={listShared}";
 			var loadedTodos = await HttpClient.GetFromJsonAsync<List<Todo>>(url);
 			return loadedTodos;
 		}

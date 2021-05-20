@@ -12,8 +12,8 @@ using Tomorrow.Application.Todos.Commands.Complete;
 using Tomorrow.Application.Todos.Commands.Create;
 using Tomorrow.Application.Todos.Commands.Edit;
 using Tomorrow.Application.Todos.Queries.GetById;
-using Tomorrow.Application.Todos.Queries.ListAll;
 using Tomorrow.Application.Todos.Queries.ListByGroup;
+using Tomorrow.Application.Todos.Queries.ListShared;
 using Tomorrow.Application.Todos.Queries.ListWithoutGroup;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -115,13 +115,13 @@ namespace Tomorrow.Web.Server.Controllers
 
 		// GET: api/<TodosController>
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<TodoDto>>> GetAsListAsync(int limit, int offset, bool listAll, Guid? groupId)
+		public async Task<ActionResult<IEnumerable<TodoDto>>> GetAsListAsync(int limit, int offset, bool listShared, Guid? groupId)
 		{
 			IRequest<IReadOnlyList<TodoDto>> query;
 			if (groupId.HasValue)
 				query = new ListTodosByGroupQuery(groupId.Value, limit, offset);
-			else if (listAll)
-				query = new ListAllTodosQuery(limit, offset);
+			else if (listShared)
+				query = new ListSharedTodosQuery(limit, offset);
 			else
 				query = new ListTodosWithoutGroupQuery(limit, offset);
 

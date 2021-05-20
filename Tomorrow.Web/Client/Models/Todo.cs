@@ -8,6 +8,7 @@ namespace Tomorrow.Web.Client.Models
 		public bool Completed { get; set; }
 		public string GroupId { get; set; }
 		public string Id { get; set; }
+		public bool IsViewOnly { get; set; }
 
 		[StringLength(256, ErrorMessage = "Name is too long")]
 		[Required]

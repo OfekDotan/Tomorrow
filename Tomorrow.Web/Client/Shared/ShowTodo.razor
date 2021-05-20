@@ -16,14 +16,21 @@
             }
             <MudText Typo="Typo.subtitle2" Class="@cssClass">@urgency</MudText>
         </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary" @onclick="ShowEditor">Edit</MudButton>
-            @if (!Todo.Completed)
-            {
-                <MudIconButton Icon="@Icons.Material.Filled.Done" Color="Color.Default" @onclick="CompleteAsync" />
-            }
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="DeleteAsync" />
-        </MudCardActions>
+        @if (!Todo.IsViewOnly)
+        {
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" @onclick="ShowEditor">Edit</MudButton>
+                @if (!Todo.Completed)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Done" Color="Color.Default" @onclick="CompleteAsync" />
+                }
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="DeleteAsync" />
+            </MudCardActions>
+        }
+        else
+        {
+            <div class="pb-4"></div>
+        }
     </MudCard>
 }
 else

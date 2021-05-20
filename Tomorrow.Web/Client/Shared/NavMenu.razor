@@ -5,6 +5,7 @@
     <MudNavLink Href="/dashboard" Icon="@Icons.Filled.Dashboard">DashBoard</MudNavLink>
     <MudNavLink Href="/create-todo" Icon="@Icons.Filled.AddTask">Create a todo</MudNavLink>
     <MudNavLink Href="/create-group" Icon="@Icons.Filled.PlaylistAdd">Create a Group</MudNavLink>
+    <MudNavLink Href="/shared" Icon="@Icons.Filled.Share">Shared with me</MudNavLink>
     <AuthorizeView>
         <Authorized>
             <MudNavGroup Title="Groups" Icon="@Icons.Filled.ViewList" Expanded="navMenuGroupsOpen" ExpandedChanged="RefreshMenuAsync">
@@ -36,8 +37,6 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        @*groups.AddRange(await Service.GetGroupsAsync());
-            StateHasChanged();*@
     }
 
 }
