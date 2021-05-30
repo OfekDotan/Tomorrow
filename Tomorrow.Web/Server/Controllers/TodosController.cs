@@ -16,8 +16,6 @@ using Tomorrow.Application.Todos.Queries.ListByGroup;
 using Tomorrow.Application.Todos.Queries.ListShared;
 using Tomorrow.Application.Todos.Queries.ListWithoutGroup;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Tomorrow.Web.Server.Controllers
 {
 	[Route("api/[controller]")]
@@ -37,7 +35,7 @@ namespace Tomorrow.Web.Server.Controllers
 		{
 			if (id != command.Id)
 			{
-				throw new Exception("Url id param and request doesn't match");
+				throw new Exception("Url id param and request doesn't match"); // FIXME - implement Custom exceptions and handling
 			}
 
 			await requestSender.Send(command);
