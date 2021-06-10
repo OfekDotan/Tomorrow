@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Tomorrow.Web.Server.Authentication
+namespace Tomorrow.Application.Todos.Commands
 {
 	[Serializable]
-	internal class UserNotFoundException : Exception
+	public class UserNotFoundException : Exception
 	{
 		public UserNotFoundException()
 		{

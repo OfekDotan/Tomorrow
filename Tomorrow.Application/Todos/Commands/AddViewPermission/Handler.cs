@@ -31,13 +31,18 @@ namespace Tomorrow.Application.Todos.Commands.AddViewPermission
 
 			if (todo is null || !todo.CanEdit(currentAccount))
 				throw new Exception("Todo not found");
+			try
+			{
+				var account = await accountProvider.GetAccountFromEmailAsync(request.Email, cancellationToken);
+				if (account.Id == currentAccount.Id)
+					throw new Exception("You can't add your account");
 
-			var account = await accountProvider.GetAccountFromEmailAsync(request.Email, cancellationToken);
-			if (account.Id == currentAccount.Id)
-				throw new Exception("You can't add your account");
-
-			todo.accountsThatCanView.Add(account);
-			await dbContext.SaveChangesAsync(cancellationToken);
+				todo.accountsThatCanView.Add(account);
+				await dbContext.SaveChangesAsync(cancellationToken);
+			}
+			catch (UserNotFoundException)
+			{
+			}
 
 			return Unit.Value;
 		}

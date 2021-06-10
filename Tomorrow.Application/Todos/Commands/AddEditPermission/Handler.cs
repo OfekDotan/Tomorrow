@@ -32,12 +32,18 @@ namespace Tomorrow.Application.Todos.Commands.AddEditPermission
 			if (todo is null || !todo.CanEdit(currentAccount))
 				throw new Exception("Todo not found");
 
-			var account = await accountProvider.GetAccountFromEmailAsync(request.Email, cancellationToken);
-			if (account.Id == currentAccount.Id)
-				throw new Exception("You can't add your account");
+			try
+			{
+				var account = await accountProvider.GetAccountFromEmailAsync(request.Email, cancellationToken);
+				if (account.Id == currentAccount.Id)
+					throw new Exception("You can't add your account");
 
-			todo.accountsThatCanEdit.Add(account);
-			await dbContext.SaveChangesAsync(cancellationToken);
+				todo.accountsThatCanEdit.Add(account);
+				await dbContext.SaveChangesAsync(cancellationToken);
+			}
+			catch (UserNotFoundException)
+			{
+			}
 
 			return Unit.Value;
 		}
