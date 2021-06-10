@@ -48,6 +48,12 @@ namespace Tomorrow.Web.Server
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			app.UseSwagger();
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tomorrow API");
+			});
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapRazorPages();
@@ -85,6 +91,8 @@ namespace Tomorrow.Web.Server
 			services.AddRazorPages();
 
 			services.AddMatBlazor();
+
+			services.AddSwaggerGen();
 		}
 	}
 }
