@@ -63,11 +63,5 @@ namespace Tomorrow.Web.Server.Controllers
 
 			return Ok(groups);
 		}
-
-		// PUT api/<GroupsController>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
-		{
-		}
 	}
 }
