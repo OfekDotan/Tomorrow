@@ -18,7 +18,7 @@ namespace Tomorrow.Application.Todos.Commands.AddViewPermission
 			this.accountProvider = accountProvider;
 			this.dbContext = dbContext;
 		}
-
+		  
 		public async Task<Unit> Handle(AddViewPermissionsCommand request, CancellationToken cancellationToken)
 		{
 			var currentAccount = await accountProvider.GetCurrentAsync(cancellationToken);
